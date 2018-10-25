@@ -53,7 +53,7 @@ private struct ImageMediaItem: MediaItem {
 
 }
 
-internal struct MockMessage: MessageType {
+internal struct MockMessage: Message {
 
     var messageId: String
     var sender: Sender

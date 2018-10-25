@@ -26,47 +26,47 @@ import Foundation
 
 public extension MessagesLayoutDelegate {
 
-    func avatarSize(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGSize {
+    func avatarSize(for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGSize {
         fatalError("avatarSize(for:at:in) has been removed in MessageKit 1.0.")
     }
 
-    func avatarPosition(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> AvatarPosition {
+    func avatarPosition(for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> AvatarPosition {
         fatalError("avatarPosition(for:at:in) has been removed in MessageKit 1.0.")
     }
 
-    func messageLabelInset(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIEdgeInsets {
+    func messageLabelInset(for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIEdgeInsets {
         fatalError("messageLabelInset(for:at:in) has been removed in MessageKit 1.0")
     }
 
-    func messagePadding(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIEdgeInsets {
+    func messagePadding(for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIEdgeInsets {
         fatalError("messagePadding(for:at:in) has been removed in MessageKit 1.0.")
     }
 
-    func cellTopLabelAlignment(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LabelAlignment {
+    func cellTopLabelAlignment(for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LabelAlignment {
         fatalError("cellTopLabelAlignment(for:at:in) has been removed in MessageKit 1.0.")
     }
 
-    func cellBottomLabelAlignment(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LabelAlignment {
+    func cellBottomLabelAlignment(for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LabelAlignment {
         fatalError("cellBottomLabelAlignment(for:at:in) has been removed in MessageKit 1.0.")
     }
 
-    func widthForMedia(message: MessageType, at indexPath: IndexPath, with maxWidth: CGFloat, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+    func widthForMedia(message: Message, at indexPath: IndexPath, with maxWidth: CGFloat, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         fatalError("widthForMedia(message:at:with:in) has been removed in MessageKit 1.0.")
     }
 
-    func heightForMedia(message: MessageType, at indexPath: IndexPath, with maxWidth: CGFloat, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+    func heightForMedia(message: Message, at indexPath: IndexPath, with maxWidth: CGFloat, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         fatalError("heightForMedia(message:at:with:in) has been removed in MessageKit 1.0.")
     }
 
-    func widthForLocation(message: MessageType, at indexPath: IndexPath, with maxWidth: CGFloat, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+    func widthForLocation(message: Message, at indexPath: IndexPath, with maxWidth: CGFloat, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         fatalError("widthForLocation(message:at:with:in) has been removed in MessageKit 1.0.")
     }
 
-   func heightForLocation(message: MessageType, at indexPath: IndexPath, with maxWidth: CGFloat, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+   func heightForLocation(message: Message, at indexPath: IndexPath, with maxWidth: CGFloat, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         fatalError("heightForLocation(message:at:with:in) has been removed in MessageKit 1.0.")
     }
 
-    func shouldCacheLayoutAttributes(for message: MessageType) -> Bool {
+    func shouldCacheLayoutAttributes(for message: Message) -> Bool {
         fatalError("shouldCacheLayoutAttributes(for:) has been removed in MessageKit 1.0.")
     }
 }

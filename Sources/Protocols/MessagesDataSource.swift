@@ -39,14 +39,14 @@ public protocol MessagesDataSource: AnyObject {
     /// - Note:
     ///   The default implementation of this method checks for equality between
     ///   the message's `Sender` and the current `Sender`.
-    func isFromCurrentSender(message: MessageType) -> Bool
+    func isFromCurrentSender(message: Message) -> Bool
 
     /// The message to be used for a `MessageCollectionViewCell` at the given `IndexPath`.
     ///
     /// - Parameters:
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which the message will be displayed.
-    func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType
+    func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> Message
 
     /// The number of sections to be displayed in the `MessagesCollectionView`.
     ///
@@ -66,37 +66,37 @@ public protocol MessagesDataSource: AnyObject {
     /// The attributed text to be used for cell's top label.
     ///
     /// - Parameters:
-    ///   - message: The `MessageType` that will be displayed by this cell.
+    ///   - message: The `Message` that will be displayed by this cell.
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     ///
     /// The default value returned by this method is `nil`.
-    func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString?
+    func cellTopLabelAttributedText(for message: Message, at indexPath: IndexPath) -> NSAttributedString?
     
     /// The attributed text to be used for message bubble's top label.
     ///
     /// - Parameters:
-    ///   - message: The `MessageType` that will be displayed by this cell.
+    ///   - message: The `Message` that will be displayed by this cell.
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     ///
     /// The default value returned by this method is `nil`.
-    func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString?
+    func messageTopLabelAttributedText(for message: Message, at indexPath: IndexPath) -> NSAttributedString?
 
     /// The attributed text to be used for cell's bottom label.
     ///
     /// - Parameters:
-    ///   - message: The `MessageType` that will be displayed by this cell.
+    ///   - message: The `Message` that will be displayed by this cell.
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     ///
     /// The default value returned by this method is `nil`.
-    func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString?
+    func messageBottomLabelAttributedText(for message: Message, at indexPath: IndexPath) -> NSAttributedString?
 }
 
 public extension MessagesDataSource {
 
-    func isFromCurrentSender(message: MessageType) -> Bool {
+    func isFromCurrentSender(message: Message) -> Bool {
         return message.sender.id == currentSender().id
     }
 
@@ -104,15 +104,15 @@ public extension MessagesDataSource {
         return 1
     }
 
-    func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func cellTopLabelAttributedText(for message: Message, at indexPath: IndexPath) -> NSAttributedString? {
         return nil
     }
     
-    func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func messageTopLabelAttributedText(for message: Message, at indexPath: IndexPath) -> NSAttributedString? {
         return nil
     }
 
-    func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func messageBottomLabelAttributedText(for message: Message, at indexPath: IndexPath) -> NSAttributedString? {
         return nil
     }
 }

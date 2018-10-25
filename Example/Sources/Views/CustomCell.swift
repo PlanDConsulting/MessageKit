@@ -50,7 +50,7 @@ open class CustomCell: UICollectionViewCell {
         label.frame = contentView.bounds
     }
     
-    open func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
+    open func configure(with message: Message, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
         // Do stuff
         switch message.kind {
         case .custom(let data):

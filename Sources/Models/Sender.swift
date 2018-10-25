@@ -37,3 +37,10 @@ public protocol Sender {
     /// The display name of a sender.
 	var displayName: String { get }
 }
+
+public func ==(lhs: Sender, rhs: Sender) -> Bool {
+	return lhs.id == rhs.id
+}
+public func !=(lhs: Sender, rhs: Sender) -> Bool {
+	return !(lhs == rhs)
+}

@@ -31,10 +31,10 @@ final internal class SampleData {
 
     private init() {}
 
-    let system = Sender(id: "000000", displayName: "System")
-    let nathan = Sender(id: "000001", displayName: "Nathan Tannar")
-    let steven = Sender(id: "000002", displayName: "Steven Deutsch")
-    let wu = Sender(id: "000003", displayName: "Wu Zhong")
+    let system = MockSender(id: "000000", displayName: "System")
+    let nathan = MockSender(id: "000001", displayName: "Nathan Tannar")
+    let steven = MockSender(id: "000002", displayName: "Steven Deutsch")
+    let wu = MockSender(id: "000003", displayName: "Wu Zhong")
 
     lazy var senders = [nathan, steven, wu]
 
@@ -188,18 +188,17 @@ final internal class SampleData {
         let firstName = sender.displayName.components(separatedBy: " ").first
         let lastName = sender.displayName.components(separatedBy: " ").first
         let initials = "\(firstName?.first ?? "A")\(lastName?.first ?? "A")"
-        switch sender {
-        case nathan:
-            return Avatar(image: #imageLiteral(resourceName: "Nathan-Tannar"), initials: initials)
-        case steven:
-            return Avatar(image: #imageLiteral(resourceName: "Steven-Deutsch"), initials: initials)
-        case wu:
-            return Avatar(image: #imageLiteral(resourceName: "Wu-Zhong"), initials: initials)
-        case system:
-            return Avatar(image: nil, initials: "SS")
-        default:
-            return Avatar(image: nil, initials: initials)
-        }
+		if sender == nathan {
+			return Avatar(image: #imageLiteral(resourceName: "Nathan-Tannar"), initials: initials)
+		} else if sender == steven {
+			return Avatar(image: #imageLiteral(resourceName: "Steven-Deutsch"), initials: initials)
+		} else if sender == wu {
+			return Avatar(image: #imageLiteral(resourceName: "Wu-Zhong"), initials: initials)
+		} else if sender == system {
+			return Avatar(image: nil, initials: "SS")
+		} else {
+			return Avatar(image: nil, initials: initials)
+		}
     }
 
 }

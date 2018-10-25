@@ -49,13 +49,13 @@ open class TypingBubble: UIView {
     // MARK: - Subviews
     
     /// The indicator used to display the typing animation.
-    open let typingIndicator = TypingIndicator()
+	public let typingIndicator = TypingIndicator()
     
-    open let contentBubble = UIView()
+	public let contentBubble = UIView()
     
-    open let cornerBubble = BubbleCircle()
+	public let cornerBubble = BubbleCircle()
     
-    open let tinyBubble = BubbleCircle()
+	public let tinyBubble = BubbleCircle()
     
     // MARK: - Animation Layers
     

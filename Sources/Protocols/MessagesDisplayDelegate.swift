@@ -33,18 +33,18 @@ public protocol MessagesDisplayDelegate: AnyObject {
     /// Specifies the `MessageStyle` to be used for a `MessageContainerView`.
     ///
     /// - Parameters:
-    ///   - message: The `MessageType` that will be displayed by this cell.
+    ///   - message: The `Message` that will be displayed by this cell.
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     ///
     /// - Note:
     ///   The default value returned by this method is `MessageStyle.bubble`.
-    func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle
+    func messageStyle(for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle
 
     /// Specifies the background color of the `MessageContainerView`.
     ///
     /// - Parameters:
-    ///   - message: The `MessageType` that will be displayed by this cell.
+    ///   - message: The `Message` that will be displayed by this cell.
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     ///
@@ -55,12 +55,12 @@ public protocol MessagesDisplayDelegate: AnyObject {
     ///   Current sender: Green
     ///
     ///   All other senders: Gray
-    func backgroundColor(for message: MessageType, at  indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor
+    func backgroundColor(for message: Message, at  indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor
 
     /// The section header to use for a given `IndexPath`.
     ///
     /// - Parameters:
-    ///   - message: The `MessageType` that will be displayed for this header.
+    ///   - message: The `Message` that will be displayed for this header.
     ///   - indexPath: The `IndexPath` of the header.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this header will be displayed.
     func messageHeaderView(for indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageReusableView
@@ -76,32 +76,32 @@ public protocol MessagesDisplayDelegate: AnyObject {
     ///
     /// - Parameters:
     ///   - avatarView: The `AvatarView` of the cell.
-    ///   - message: The `MessageType` that will be displayed by this cell.
+    ///   - message: The `Message` that will be displayed by this cell.
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     ///
     /// - Note:
     ///   The default image configured by this method is `?`.
-    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
+    func configureAvatarView(_ avatarView: AvatarView, for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
 
     /// Used to configure the `AccessoryView` in a `MessageContentCell` class.
     ///
     /// - Parameters:
     ///   - accessoryView: The `AccessoryView` of the cell.
-    ///   - message: The `MessageType` that will be displayed by this cell.
+    ///   - message: The `Message` that will be displayed by this cell.
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     ///
     /// - Note:
     ///   The default image configured by this method is `?`.
-    func configureAccessoryView(_ accessoryView: UIView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
+    func configureAccessoryView(_ accessoryView: UIView, for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
 
     // MARK: - Text Messages
 
     /// Specifies the color of the text for a `TextMessageCell`.
     ///
     /// - Parameters:
-    ///   - message: A `MessageType` with a `MessageKind` case of `.text` to which the color will apply.
+    ///   - message: A `Message` with a `MessageKind` case of `.text` to which the color will apply.
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     ///
@@ -111,56 +111,56 @@ public protocol MessagesDisplayDelegate: AnyObject {
     ///   Current sender: UIColor.white
     ///
     ///   All other senders: UIColor.darkText
-    func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor
+    func textColor(for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor
 
-    /// Specifies the `DetectorType`s to check for the `MessageType`'s text against.
+    /// Specifies the `DetectorType`s to check for the `Message`'s text against.
     ///
     /// - Parameters:
-    ///   - message: A `MessageType` with a `MessageKind` case of `.text` or `.attributedText` to which the detectors will apply.
+    ///   - message: A `Message` with a `MessageKind` case of `.text` or `.attributedText` to which the detectors will apply.
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     ///
     /// - Note:
     ///   This method returns an empty array by default.
-    func enabledDetectors(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType]
+    func enabledDetectors(for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType]
 
     /// Specifies the attributes for a given `DetectorType`
     ///
     /// - Parameters:
     ///   - detector: The `DetectorType` for the applied attributes.
-    ///   - message: A `MessageType` with a `MessageKind` case of `.text` or `.attributedText` to which the detectors will apply.
+    ///   - message: A `Message` with a `MessageKind` case of `.text` or `.attributedText` to which the detectors will apply.
     ///   - indexPath: The `IndexPath` of the cell.
-    func detectorAttributes(for detector: DetectorType, and message: MessageType, at indexPath: IndexPath) -> [NSAttributedStringKey: Any]
+    func detectorAttributes(for detector: DetectorType, and message: Message, at indexPath: IndexPath) -> [NSAttributedStringKey: Any]
 
     // MARK: - Location Messages
 
     /// Used to configure a `LocationMessageSnapshotOptions` instance to customize the map image on the given location message.
     ///
     /// - Parameters:
-    ///   - message: A `MessageType` with a `MessageKind` case of `.location`.
+    ///   - message: A `Message` with a `MessageKind` case of `.location`.
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` requesting the information.
     /// - Returns: The LocationMessageSnapshotOptions instance with the options to customize map style.
-    func snapshotOptionsForLocation(message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LocationMessageSnapshotOptions
+    func snapshotOptionsForLocation(message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LocationMessageSnapshotOptions
 
     /// Used to configure the annoation view of the map image on the given location message.
     ///
     /// - Parameters:
-    ///   - message: A `MessageType` with a `MessageKind` case of `.location`.
+    ///   - message: A `Message` with a `MessageKind` case of `.location`.
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` requesting the information.
     /// - Returns: The `MKAnnotationView` to use as the annotation view.
-    func annotationViewForLocation(message: MessageType, at indexPath: IndexPath, in messageCollectionView: MessagesCollectionView) -> MKAnnotationView?
+    func annotationViewForLocation(message: Message, at indexPath: IndexPath, in messageCollectionView: MessagesCollectionView) -> MKAnnotationView?
 
     /// Ask the delegate for a custom animation block to run when whe map screenshot is ready to be displaied in the given location message.
     /// The animation block is called with the `UIImageView` to be animated.
     ///
     /// - Parameters:
-    ///   - message: A `MessageType` with a `MessageKind` case of `.location`.
+    ///   - message: A `Message` with a `MessageKind` case of `.location`.
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` requesting the information.
     /// - Returns: The animation block to use to apply the location image.
-    func animationBlockForLocation(message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> ((UIImageView) -> Void)?
+    func animationBlockForLocation(message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> ((UIImageView) -> Void)?
 
     // MARK: - Media Messages
 
@@ -168,10 +168,10 @@ public protocol MessagesDisplayDelegate: AnyObject {
     ///
     /// - Parameters:
     ///   - imageView: The `UIImageView` of the cell.
-    ///   - message: The `MessageType` that will be displayed by this cell.
+    ///   - message: The `Message` that will be displayed by this cell.
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
-    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
+    func configureMediaMessageImageView(_ imageView: UIImageView, for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
 
 }
 
@@ -179,11 +179,11 @@ public extension MessagesDisplayDelegate {
 
     // MARK: - All Messages Defaults
 
-    func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
+    func messageStyle(for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
         return .bubble
     }
 
-    func backgroundColor(for message: MessageType, at  indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+    func backgroundColor(for message: Message, at  indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
 
         switch message.kind {
         case .emoji:
@@ -202,45 +202,45 @@ public extension MessagesDisplayDelegate {
         return messagesCollectionView.dequeueReusableFooterView(MessageReusableView.self, for: indexPath)
     }
     
-    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+    func configureAvatarView(_ avatarView: AvatarView, for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         avatarView.initials = "?"
     }
 
-    func configureAccessoryView(_ accessoryView: UIView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {}
+    func configureAccessoryView(_ accessoryView: UIView, for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {}
 
     // MARK: - Text Messages Defaults
 
-    func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+    func textColor(for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
         guard let dataSource = messagesCollectionView.messagesDataSource else {
             fatalError(MessageKitError.nilMessagesDataSource)
         }
         return dataSource.isFromCurrentSender(message: message) ? .white : .darkText
     }
 
-    func enabledDetectors(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {
+    func enabledDetectors(for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {
         return []
     }
 
-    func detectorAttributes(for detector: DetectorType, and message: MessageType, at indexPath: IndexPath) -> [NSAttributedStringKey: Any] {
+    func detectorAttributes(for detector: DetectorType, and message: Message, at indexPath: IndexPath) -> [NSAttributedStringKey: Any] {
         return MessageLabel.defaultAttributes
     }
 
     // MARK: - Location Messages Defaults
 
-    func snapshotOptionsForLocation(message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LocationMessageSnapshotOptions {
+    func snapshotOptionsForLocation(message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LocationMessageSnapshotOptions {
         return LocationMessageSnapshotOptions()
     }
 
-    func annotationViewForLocation(message: MessageType, at indexPath: IndexPath, in messageCollectionView: MessagesCollectionView) -> MKAnnotationView? {
+    func annotationViewForLocation(message: Message, at indexPath: IndexPath, in messageCollectionView: MessagesCollectionView) -> MKAnnotationView? {
         return MKPinAnnotationView(annotation: nil, reuseIdentifier: nil)
     }
 
-    func animationBlockForLocation(message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> ((UIImageView) -> Void)? {
+    func animationBlockForLocation(message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> ((UIImageView) -> Void)? {
         return nil
     }
 
     // MARK: - Media Message Defaults
 
-    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+    func configureMediaMessageImageView(_ imageView: UIImageView, for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
     }
 }
