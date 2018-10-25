@@ -25,33 +25,15 @@
 import Foundation
 
 /// An object that groups the metadata of a messages sender.
-public struct Sender {
+public protocol Sender {
 
     /// MARK: - Properties
 
     /// The unique String identifier for the sender.
     ///
     /// Note: This value must be unique across all senders.
-    public let id: String
+	var id: String { get }
 
     /// The display name of a sender.
-    public let displayName: String
-
-    // MARK: - Intializers
-
-    public init(id: String, displayName: String) {
-        self.id = id
-        self.displayName = displayName
-    }
-}
-
-// MARK: - Equatable Conformance
-
-extension Sender: Equatable {
-
-    /// Two senders are considered equal if they have the same id.
-    public static func == (left: Sender, right: Sender) -> Bool {
-        return left.id == right.id
-    }
-
+	var displayName: String { get }
 }

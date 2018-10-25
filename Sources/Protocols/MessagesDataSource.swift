@@ -97,7 +97,7 @@ public protocol MessagesDataSource: AnyObject {
 public extension MessagesDataSource {
 
     func isFromCurrentSender(message: MessageType) -> Bool {
-        return message.sender == currentSender()
+        return message.sender.id == currentSender().id
     }
 
     func numberOfItems(inSection section: Int, in messagesCollectionView: MessagesCollectionView) -> Int {

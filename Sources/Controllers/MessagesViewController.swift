@@ -46,7 +46,13 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     ///
     /// The default value of this property is `false`.
     open var maintainPositionOnKeyboardFrameChanged: Bool = false
-    
+
+	/// A Boolean value that determines whether the `MenuInputBar`
+	/// is displayed
+	///
+	/// The default value of this property is `true`.
+	open var displaysInputBar: Bool = true
+
     /// A Boolean value indicating if the `TypingBubbleCell` has been inserted at the last
     /// `IndexPath` of the `MessagesCollectionViewCell`
     public private(set) var isTypingIndicatorHidden: Bool = true
@@ -72,7 +78,7 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     }
 
     open override var inputAccessoryView: UIView? {
-        return messageInputBar
+		return displaysInputBar ? messageInputBar : nil
     }
 
     open override var shouldAutorotate: Bool {
