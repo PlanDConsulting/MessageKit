@@ -8,7 +8,32 @@ The changelog for `MessageKit`. Also see the [releases](https://github.com/Messa
 
 ### Changed
 
-- The `MessageData.emoji` case once again uses a default font of 2x the `messageLabelFont` size.
+- Fixed the way that the Strings and UIImages are parsed in the `InputTextView` to prevent crashes in `parseForComponents()`. 
+[#791](https://github.com/MessageKit/MessageKit/pull/791) by [@nathantannar4](https://github.com/nathantannar4)
+
+### Added
+
+- Added support for detection and handling of `NSLink`s inside of messages.
+[#815](https://github.com/MessageKit/MessageKit/pull/815) by [@jnic](https://github.com/jnic)
+
+- **Breaking Change** Added typing indicator support to MessageKit by adding an extra section to `MessagesCollectionView` when needed. This included adding the following views: `BubbleCircle`, `TypingBubble`, `TypingIndicator`, `TypingBubbleCell`. Determine if the section is reserved for the typing indicator with `isSectionReservedForTypingIndicator(_ section: Int) -> Bool`, and set the typing indicators visiability with `setTypingIndicatorHidden(_ isHidden: Bool, animated: Bool, whilePerforming updates: (() -> Void)? = nil, completion: ((Bool) -> Void)?=nil)`
+
+TypingMessageSizeCalculator.swift
+
+- Added customizable `accessoryView`, with a new `MessagesDisplayDelegate` function `configureAccessoryView`, and corresponding size & padding properties in `MessageSizeCalculator`. [#710](https://github.com/MessageKit/MessageKit/pull/710) by [@hyouuu](https://github.com/hyouuu)
+
+- Added customizable `accessoryView`, with a new `MessagesDisplayDelegate` function `configureAccessoryView`, and corresponding size & padding properties in `MessageSizeCalculator`. 
+[#710](https://github.com/MessageKit/MessageKit/pull/710) by [@hyouuu](https://github.com/hyouuu)
+
+- Added `additionalBottomInset` property that allows to adjust the bottom content inset automatically set on the messages collection view by the view controller. 
+[#787](https://github.com/MessageKit/MessageKit/pull/787) by [@andreyvit](https://github.com/andreyvit)
+
+### Fixed
+
+- Fixed bottom content inset adjustment when using an undocked keyboard on iPad, or when `edgesForExtendedLayout` does not include `.top`, or when a parent container view controller adds extra views at the top of the screen. 
+[#787](https://github.com/MessageKit/MessageKit/pull/787) by [@andreyvit](https://github.com/andreyvit)
+
+- Fixed the `MessageData.emoji` case to use 2x the `messageLabelFont` size by default.
 [#795](https://github.com/MessageKit/MessageKit/pull/795) by [@Vortec4800](https://github.com/vortec4800).
 
 ## [1.0.0](https://github.com/MessageKit/MessageKit/releases/tag/1.0.0)

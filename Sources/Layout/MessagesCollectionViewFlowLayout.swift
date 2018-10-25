@@ -61,6 +61,8 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
         guard let collectionView = collectionView else { return 0 }
         return collectionView.frame.width - sectionInset.left - sectionInset.right
     }
+    
+    internal var isTypingIndicatorHidden: Bool = true
 
     // MARK: - Initializers
 
@@ -121,6 +123,16 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     private func handleOrientationChange(_ notification: Notification) {
         invalidateLayout()
     }
+    
+    // MARK: - Typing Indicator Helpers
+    
+    /// Determines if the section is reserved for the typing indicator bubble
+    ///
+    /// - Parameter section: The section to compare against
+    /// - Returns: A Boolean value indicating if the section is reserved for the `TypingBubbleCell`
+    public func isSectionReservedForTypingIndicator(_ section: Int) -> Bool {
+        return !isTypingIndicatorHidden && section == self.messagesCollectionView.numberOfSections - 1
+    }
 
     // MARK: - Cell Sizing
 
@@ -134,8 +146,12 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     lazy open var photoMessageSizeCalculator = MediaMessageSizeCalculator(layout: self)
     lazy open var videoMessageSizeCalculator = MediaMessageSizeCalculator(layout: self)
     lazy open var locationMessageSizeCalculator = LocationMessageSizeCalculator(layout: self)
+    lazy open var typingCellSizeCalculator = TypingCellSizeCalculator(layout: self)
 
     open func cellSizeCalculatorForItem(at indexPath: IndexPath) -> CellSizeCalculator {
+        if isSectionReservedForTypingIndicator(indexPath.section) {
+            return typingCellSizeCalculator
+        }
         let message = messagesDataSource.messageForItem(at: indexPath, in: messagesCollectionView)
         switch message.kind {
         case .text:
@@ -219,7 +235,27 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     public func setMessageOutgoingMessageBottomLabelAlignment(_ newAlignment: LabelAlignment) {
         messageSizeCalculators().forEach { $0.outgoingMessageBottomLabelAlignment = newAlignment }
     }
-    
+
+    /// Set `incomingAccessoryViewSize` of all `MessageSizeCalculator`s
+    public func setMessageIncomingAccessoryViewSize(_ newSize: CGSize) {
+        messageSizeCalculators().forEach { $0.incomingAccessoryViewSize = newSize }
+    }
+
+    /// Set `outgoingAvatarSize` of all `MessageSizeCalculator`s
+    public func setMessageOutgoingAccessoryViewSize(_ newSize: CGSize) {
+        messageSizeCalculators().forEach { $0.outgoingAccessoryViewSize = newSize }
+    }
+
+    /// Set `incomingAccessoryViewSize` of all `MessageSizeCalculator`s
+    public func setMessageIncomingAccessoryViewPadding(_ newPadding: UIEdgeInsets) {
+        messageSizeCalculators().forEach { $0.incomingAccessoryViewPadding = newPadding }
+    }
+
+    /// Set `outgoingAvatarSize` of all `MessageSizeCalculator`s
+    public func setMessageOutgoingAccessoryViewPadding(_ newPadding: UIEdgeInsets) {
+        messageSizeCalculators().forEach { $0.outgoingAccessoryViewPadding = newPadding }
+    }
+
     /// Get all `MessageSizeCalculator`s
     open func messageSizeCalculators() -> [MessageSizeCalculator] {
         return [textMessageSizeCalculator, attributedTextMessageSizeCalculator, emojiMessageSizeCalculator, photoMessageSizeCalculator, videoMessageSizeCalculator, locationMessageSizeCalculator]

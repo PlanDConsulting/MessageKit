@@ -46,6 +46,26 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     ///
     /// The default value of this property is `false`.
     open var maintainPositionOnKeyboardFrameChanged: Bool = false
+    
+    /// A Boolean value indicating if the `TypingBubbleCell` has been inserted at the last
+    /// `IndexPath` of the `MessagesCollectionViewCell`
+    public private(set) var isTypingIndicatorHidden: Bool = true
+    
+    /// A CGFloat value that determines the spacing between the message and
+    /// the `TypingBubbleCell`
+    ///
+    /// The default value of this property is `10`
+    open var typingIndicatorTopInset: CGFloat = 10
+    
+    /// A property that determines the color of the `TypingBubble` within the `TypingBubbleCell`
+    ///
+    /// The default value of this property is `UIColor.incomingGray`
+    open var typingBubbleBackgroundColor: UIColor = .incomingGray
+    
+    /// A property that determines the color of the `TypingIndicator` dots within the `TypingBubble`
+    ///
+    /// The default value of this property is `UIColor.lightGray`
+    open var typingBubbleDotColor: UIColor = .lightGray
 
     open override var canBecomeFirstResponder: Bool {
         return true
@@ -57,6 +77,17 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
     open override var shouldAutorotate: Bool {
         return false
+    }
+
+    /// A CGFloat value that adds to (or, if negative, subtracts from) the automatically
+    /// computed value of `messagesCollectionView.contentInset.bottom`. Meant to be used
+    /// as a measure of last resort when the built-in algorithm does not produce the right
+    /// value for your app. Please let us know when you end up having to use this property.
+    open var additionalBottomInset: CGFloat = 0 {
+        didSet {
+            let delta = additionalBottomInset - oldValue
+            messageCollectionViewBottomInset += delta
+        }
     }
 
     private var isFirstLayout: Bool = true
@@ -94,14 +125,19 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
         isMessagesControllerBeingDismissed = true
     }
     
+    open override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        isMessagesControllerBeingDismissed = false
+    }
+    
     open override func viewDidLayoutSubviews() {
         // Hack to prevent animation of the contentInset after viewDidAppear
         if isFirstLayout {
             defer { isFirstLayout = false }
             addKeyboardObservers()
-            messageCollectionViewBottomInset = keyboardOffsetFrame.height
+            messageCollectionViewBottomInset = requiredInitialScrollViewBottomInset()
         }
-        adjustScrollViewInset()
+        adjustScrollViewTopInset()
     }
 
     // MARK: - Initializers
@@ -147,6 +183,76 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
             NSLayoutConstraint.activate([top, bottom, trailing, leading])
         }
     }
+    
+    // MARK: - Typing Indicator API
+    
+    /// Sets the typing indicator sate by inserting/deleting the `TypingBubbleCell`
+    ///
+    /// - Parameters:
+    ///   - isHidden: A Boolean value that is to be the new state of the typing indicator
+    ///   - animated: A Boolean value determining if the insertion is to be animated
+    ///   - updates: A block of code that will be executed during `performBatchUpdates`
+    ///              when `animated` is `TRUE` or before the `completion` block executes
+    ///              when `animated` is `FALSE`
+    ///   - completion: A completion block to execute after the insertion/deletion
+    open func setTypingIndicatorHidden(_ isHidden: Bool, animated: Bool, whilePerforming updates: (() -> Void)? = nil, completion: ((Bool) -> Void)? = nil) {
+        
+        guard isTypingIndicatorHidden != isHidden else { return }
+        
+        let section = messagesCollectionView.numberOfSections
+        
+        isTypingIndicatorHidden = isHidden
+        guard let messagesFlowLayout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout else {
+            return
+        }
+        
+        // Required so the layout knows to preserve the last section for the typing indicator
+        messagesFlowLayout.isTypingIndicatorHidden = isHidden
+        
+        if animated {
+            messagesCollectionView.performBatchUpdates({ [weak self] in
+                self?.performUpdatesForTypingBubbleVisability(at: section)
+                updates?()
+            }, completion: completion)
+        } else {
+            performUpdatesForTypingBubbleVisability(at: section)
+            updates?()
+            completion?(true)
+        }
+    }
+    
+    /// Performs a delete or insert on the `MessagesCollectionView` on the provided section
+    ///
+    /// - Parameter section: The index to modify
+    private func performUpdatesForTypingBubbleVisability(at section: Int) {
+        if isTypingIndicatorHidden {
+            // Delete the typing indicator cell
+            messagesCollectionView.deleteSections([section - 1])
+        } else {
+            // Insert the typing indicator cell
+            messagesCollectionView.insertSections([section])
+        }
+    }
+    
+    /// Determines if the section is reserved for the typing indicator bubble
+    ///
+    /// - Parameter section: The section to compare against
+    /// - Returns: A Boolean value indicating if the section is reserved for the `TypingBubbleCell`
+    public func isSectionReservedForTypingIndicator(_ section: Int) -> Bool {
+        return !isTypingIndicatorHidden && section == self.numberOfSections(in: messagesCollectionView) - 1
+    }
+    
+    /// Returns a dequeued `UICollectionViewCell` that is inserted when the typing indicator is shown
+    ///
+    /// - Parameter indexPath: The `IndexPath` the cell will appear at
+    /// - Returns: A `UICollectionViewCell` designed to indicate another user is typing
+    open func dequeuedTypingCell(for indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = messagesCollectionView.dequeueReusableCell(TypingBubbleCell.self, for: indexPath)
+        cell.typingBubble.backgroundColor = typingBubbleBackgroundColor
+        cell.typingBubble.typingIndicator.dotColor = typingBubbleDotColor
+        cell.typingBubble.startAnimating()
+        return cell
+    }
 
     // MARK: - UICollectionViewDataSource
 
@@ -154,12 +260,16 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
         guard let collectionView = collectionView as? MessagesCollectionView else {
             fatalError(MessageKitError.notMessagesCollectionView)
         }
-        return collectionView.messagesDataSource?.numberOfSections(in: collectionView) ?? 0
+        let count = collectionView.messagesDataSource?.numberOfSections(in: collectionView) ?? 0
+        return count + (isTypingIndicatorHidden ? 0 : 1)
     }
 
     open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let collectionView = collectionView as? MessagesCollectionView else {
             fatalError(MessageKitError.notMessagesCollectionView)
+        }
+        if isSectionReservedForTypingIndicator(section) {
+            return 1
         }
         return collectionView.messagesDataSource?.numberOfItems(inSection: section, in: collectionView) ?? 0
     }
@@ -168,6 +278,10 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
         guard let messagesCollectionView = collectionView as? MessagesCollectionView else {
             fatalError(MessageKitError.notMessagesCollectionView)
+        }
+        
+        guard !isSectionReservedForTypingIndicator(indexPath.section) else {
+            return dequeuedTypingCell(for: indexPath)
         }
 
         guard let messagesDataSource = messagesCollectionView.messagesDataSource else {
@@ -229,6 +343,9 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
         guard let layoutDelegate = messagesCollectionView.messagesLayoutDelegate else {
             fatalError(MessageKitError.nilMessagesLayoutDelegate)
         }
+        guard !isSectionReservedForTypingIndicator(section) else {
+            return CGSize(width: collectionView.bounds.width, height: typingIndicatorTopInset)
+        }
         return layoutDelegate.headerViewSize(for: section, in: messagesCollectionView)
     }
 
@@ -239,10 +356,16 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
         guard let layoutDelegate = messagesCollectionView.messagesLayoutDelegate else {
             fatalError(MessageKitError.nilMessagesLayoutDelegate)
         }
+        guard !isSectionReservedForTypingIndicator(section) else {
+            return .zero
+        }
         return layoutDelegate.footerViewSize(for: section, in: messagesCollectionView)
     }
 
     open func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
+        guard !isSectionReservedForTypingIndicator(indexPath.section) else {
+            return false
+        }
         guard let messagesDataSource = messagesCollectionView.messagesDataSource else { return false }
         let message = messagesDataSource.messageForItem(at: indexPath, in: messagesCollectionView)
 
@@ -256,6 +379,9 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     }
 
     open func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
+        guard !isSectionReservedForTypingIndicator(indexPath.section) else {
+            return false
+        }
         return (action == NSSelectorFromString("copy:"))
     }
 
